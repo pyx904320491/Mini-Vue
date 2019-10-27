@@ -1,15 +1,25 @@
+//编译，
 function Compile (el, vm) {
+    //vue实例
     this.vm = vm;
+    //得到挂载结点
     this.el = document.querySelector(el);
+
+    //虚拟DOM
     this.fragment = null;
+
+    //初始化
     this.init();
 }
 
 Compile.prototype = {
     init: function () {
         if (this.el) {
+            //
             this.fragment = this.nodeToFragment(this.el);
+            //编译元素
             this.compileElement(this.fragment);
+            //追加到挂载点上
             this.el.appendChild(this.fragment);
         } else {
             console.log('Dom元素不存在');
@@ -25,6 +35,7 @@ Compile.prototype = {
         }
         return fragment;
     },
+    //编译元素
     compileElement: function (el) {
         var childNodes = el.childNodes;
         var self = this;
@@ -64,6 +75,8 @@ Compile.prototype = {
         var self = this;
         var initText = this.vm[exp];
         this.updateText(node, initText);
+
+
         new Watcher(this.vm, exp, function (value) {
             self.updateText(node, value);
         });
@@ -84,6 +97,7 @@ Compile.prototype = {
             self.modelUpdater(node, value);
         });
 
+        //绑定model，input事件
         node.addEventListener('input', function (e) {
             var newValue = e.target.value;
             if (val === newValue) {
